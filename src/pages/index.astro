@@ -1,0 +1,339 @@
+---
+import AnomalyDetector from "@/components/AnomalyDetector.astro";
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout>
+  <AnomalyDetector />
+
+  <section class="mt-12">
+    <h2>使い方</h2>
+    <ol class="list-inside list-decimal space-y-2">
+      <li>参照画像（正常な画像）をアップロードします</li>
+      <li>ターゲット画像（検査したい画像）をアップロードします</li>
+      <li>「異常検出を実行」ボタンをクリックします</li>
+      <li>異常マップと統計情報が表示されます</li>
+    </ol>
+  </section>
+
+  <section class="mt-8">
+    <h2>技術情報</h2>
+    <p>
+      このシステムはMeta
+      AIのDINOv2モデルを使用したone-shot異常検出を実行します。
+      参照画像との特徴量の差分から異常領域を検出し、ヒートマップとして可視化します。
+    </p>
+  </section>
+</Layout>
+
+<dd>
+  Pre-configured with Prettier and ESLint. Automatically maintains code quality
+  and accessibility standards.
+</dd>
+
+<dt>Standard Configuration</dt>
+<dd>
+  Uses mostly default settings. No complex custom rules; follows the official
+  documentation.
+</dd>
+
+<dt>Ready to Code</dt>
+<dd>
+  Includes only the essential configuration required to start development.
+  Minimal setup time, ready to code.
+</dd>
+
+<section>
+  <h2>Tech Stack</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Tech</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Astro v5</td>
+        <td>The web framework for content-driven websites</td>
+      </tr>
+      <tr>
+        <td>TypeScript</td>
+        <td>JavaScript with syntax for types</td>
+      </tr>
+      <tr>
+        <td>Tailwind CSS v4</td>
+        <td>A utility-first CSS framework</td>
+      </tr>
+      <tr>
+        <td>Cloudflare Workers</td>
+        <td>Serverless platform running on a global network</td>
+      </tr>
+      <tr>
+        <td>Prettier</td>
+        <td>An opinionated code formatter</td>
+      </tr>
+      <tr>
+        <td>ESLint</td>
+        <td>A pluggable linting utility for JavaScript</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Getting Started</h2>
+  <h3>1. Use as Astro Template</h3>
+  <p>Create a project directly from your terminal using the Astro CLI.</p>
+  <pre><code>npm create astro@latest -- --template ryotahagihara/astro-tailwind-starter</code></pre>
+
+  <h3>2. Use as GitHub Template</h3>
+  <p>
+    Click the "Use this template" button on the GitHub repository page to create
+    a new repository.
+  </p>
+
+  <h3>3. Deploy via Services</h3>
+  <p>
+    Click the "Deploy" buttons below to automatically create a repository and
+    deploy.
+  </p>
+</section>
+
+<section>
+  <h2>CLI Commands</h2>
+  <dl>
+    <dt>Install Dependencies</dt>
+    <dd>
+      <pre><code>npm install</code></pre>
+    </dd>
+
+    <dt>Start Development Server</dt>
+    <dd>
+      <pre><code>npm run dev</code></pre>
+    </dd>
+
+    <dt>Build Production Site</dt>
+    <dd>
+      <pre><code>npm run build</code></pre>
+    </dd>
+
+    <dt>Preview Build Locally</dt>
+    <dd>
+      <pre><code>npm run preview</code></pre>
+    </dd>
+  </dl>
+</section>
+
+<section>
+  <h2>Project Structure</h2>
+  <p>Follows Astro's official directory structure conventions.</p>
+  <pre><code>.
+├── src/
+│   ├── components/
+│   │   ├── Header.astro    # Header component
+│   │   └── Footer.astro    # Footer component
+│   ├── layouts/
+│   │   └── Layout.astro    # Base layout
+│   ├── pages/
+│   │   └── index.astro     # Top page
+│   └── styles/
+│       └── global.css      # Tailwind CSS settings
+├── public/
+│   └── favicon.svg         # Favicon
+├── .prettierrc             # Prettier config
+├── eslint.config.js        # ESLint config
+├── astro.config.mjs        # Astro config
+├── wrangler.jsonc          # Cloudflare Workers config
+├── tsconfig.json           # TypeScript config
+└── package.json            # Dependencies</code></pre>
+</section>
+
+<section>
+  <h2>Deployment</h2>
+  <p>
+    Automatically create a repository and deploy to hosting services via the
+    buttons below.
+  </p>
+  <div class="not-prose my-2 flex flex-wrap items-center gap-2">
+    <a
+      href="https://deploy.workers.cloudflare.com/?url=https://github.com/ryotahagihara/astro-tailwind-starter"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <img
+        src="https://deploy.workers.cloudflare.com/button"
+        alt="Deploy to Cloudflare"
+        class="h-8"
+      />
+    </a>
+    <a
+      href="https://vercel.com/new/clone?repository-url=https://github.com/ryotahagihara/astro-tailwind-starter"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <img
+        src="https://vercel.com/button"
+        alt="Deploy with Vercel"
+        class="h-8"
+      />
+    </a>
+    <a
+      href="https://app.netlify.com/start/deploy?repository=https://github.com/ryotahagihara/astro-tailwind-starter"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <img
+        src="https://www.netlify.com/img/deploy/button.svg"
+        alt="Deploy to Netlify"
+        class="h-8"
+      />
+    </a>
+  </div>
+
+  <h3>Cloudflare Workers</h3>
+  <p>
+    Configured for Cloudflare Workers. Includes necessary configuration for
+    deployment via Wrangler.
+  </p>
+  <pre><code>npm run build && npx wrangler deploy</code></pre>
+
+  <p>
+    <strong>Note:</strong> Requires Cloudflare authentication on first run.
+  </p>
+
+  <blockquote>
+    <p>
+      Cloudflare recommends using Cloudflare Workers for new projects. See
+      <a
+        href="https://docs.astro.build/en/guides/deploy/cloudflare/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Deploy your Astro Site to Cloudflare | Docs</a
+      >
+      for details.
+    </p>
+  </blockquote>
+
+  <h3>Other Environments</h3>
+  <p>
+    Builds as a pure static site (SSG), compatible with Vercel, Netlify, GitHub
+    Pages, or any standard server. See
+    <a
+      href="https://docs.astro.build/en/guides/deploy/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Deploy your Astro Site | Docs</a
+    >
+    for details.
+  </p>
+</section>
+
+<section>
+  <h2>Resources</h2>
+  <ul>
+    <li>
+      <a href="https://astro.build/" target="_blank" rel="noopener noreferrer"
+        >Astro</a
+      >
+      -
+      <a
+        href="https://docs.astro.build/en/getting-started/"
+        target="_blank"
+        rel="noopener noreferrer">Docs</a
+      >
+    </li>
+    <li>
+      <a
+        href="https://www.typescriptlang.org/"
+        target="_blank"
+        rel="noopener noreferrer">TypeScript</a
+      >
+      -
+      <a
+        href="https://www.typescriptlang.org/docs/"
+        target="_blank"
+        rel="noopener noreferrer">Docs</a
+      >
+    </li>
+    <li>
+      <a
+        href="https://tailwindcss.com/"
+        target="_blank"
+        rel="noopener noreferrer">Tailwind CSS</a
+      >
+      -
+      <a
+        href="https://tailwindcss.com/docs/installation/using-vite"
+        target="_blank"
+        rel="noopener noreferrer">Docs</a
+      >
+    </li>
+    <li>
+      <a
+        href="https://www.cloudflare.com/developer-platform/products/workers/"
+        target="_blank"
+        rel="noopener noreferrer">Cloudflare Workers</a
+      >
+      -
+      <a
+        href="https://developers.cloudflare.com/workers/"
+        target="_blank"
+        rel="noopener noreferrer">Docs</a
+      >
+    </li>
+    <li>
+      <a href="https://prettier.io/" target="_blank" rel="noopener noreferrer"
+        >Prettier</a
+      >
+      -
+      <a
+        href="https://prettier.io/docs/"
+        target="_blank"
+        rel="noopener noreferrer">Docs</a
+      >
+    </li>
+    <li>
+      <a href="https://eslint.org/" target="_blank" rel="noopener noreferrer"
+        >ESLint</a
+      >
+      -
+      <a
+        href="https://eslint.org/docs/latest/"
+        target="_blank"
+        rel="noopener noreferrer">Docs</a
+      >
+    </li>
+  </ul>
+</section>
+
+<section>
+  <h2>Contact</h2>
+  <p>
+    Please report issues or feature requests via
+    <a
+      href="https://github.com/ryotahagihara/astro-tailwind-starter/issues"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      GitHub Issues</a
+    >.
+  </p>
+</section>
+
+<section>
+  <h2>License</h2>
+  <p>
+    MIT License - See
+    <a
+      href="https://github.com/ryotahagihara/astro-tailwind-starter/blob/main/LICENSE"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      LICENSE</a
+    >
+    for details.
+  </p>
+</section>

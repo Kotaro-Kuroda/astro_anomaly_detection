@@ -1,0 +1,11 @@
+{
+    "python.autoComplete.extraPaths": [
+        ".venv/lib/python3.11/site-packages/"
+    ],
+    "python.analysis.extraPaths": [
+        ".venv/lib/python3.11/site-packages/"
+    ],
+    "python.defaultInterpreterPath": ".venv/bin/python",
+    "python.terminal.activateEnvironment": false,
+    "python.terminal.activateEnvInCurrentTerminal": false,
+}

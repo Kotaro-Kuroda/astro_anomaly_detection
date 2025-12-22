@@ -1,0 +1,262 @@
+---
+// Astro component for anomaly detection
+---
+
+<div class="mx-auto max-w-6xl p-6">
+    <div class="rounded-lg bg-white p-8 shadow-lg">
+        <h1 class="mb-6 text-3xl font-bold text-gray-800">
+            DINOv2 異常検出システム
+        </h1>
+
+        <form id="anomaly-form" class="space-y-6">
+            <div class="grid gap-6 md:grid-cols-2">
+                <!-- 参照画像 -->
+                <div>
+                    <label class="mb-2 block text-sm font-medium text-gray-700">
+                        参照画像（正常画像）
+                    </label>
+                    <input
+                        type="file"
+                        id="reference-input"
+                        accept="image/*"
+                        class="block w-full text-sm text-gray-500 file:mr-4 file:rounded-md file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
+                    />
+                    <div id="reference-preview" class="mt-4 hidden">
+                        <img
+                            id="reference-img"
+                            alt="Reference preview"
+                            class="h-64 w-full rounded border object-contain"
+                        />
+                    </div>
+                </div>
+
+                <!-- ターゲット画像 -->
+                <div>
+                    <label class="mb-2 block text-sm font-medium text-gray-700">
+                        ターゲット画像（検査画像）
+                    </label>
+                    <input
+                        type="file"
+                        id="target-input"
+                        accept="image/*"
+                        class="block w-full text-sm text-gray-500 file:mr-4 file:rounded-md file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
+                    />
+                    <div id="target-preview" class="mt-4 hidden">
+                        <img
+                            id="target-img"
+                            alt="Target preview"
+                            class="h-64 w-full rounded border object-contain"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <button
+                type="submit"
+                id="submit-btn"
+                class="w-full rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
+            >
+                異常検出を実行
+            </button>
+        </form>
+
+        <!-- エラーメッセージ -->
+        <div
+            id="error-message"
+            class="mt-6 hidden rounded-lg border border-red-200 bg-red-50 p-4"
+        >
+            <p class="text-red-700" id="error-text"></p>
+        </div>
+
+        <!-- 結果表示 -->
+        <div id="result-container" class="mt-8 hidden space-y-6">
+            <div class="border-t pt-6">
+                <h2 class="mb-4 text-2xl font-bold text-gray-800">検出結果</h2>
+
+                <!-- ヒートマップ -->
+                <div class="mb-6">
+                    <h3 class="mb-2 text-lg font-semibold text-gray-700">
+                        異常マップ
+                    </h3>
+                    <img
+                        id="heatmap-img"
+                        alt="Anomaly heatmap"
+                        class="mx-auto w-full max-w-2xl rounded-lg shadow-md"
+                    />
+                </div>
+
+                <!-- 統計情報 -->
+                <div>
+                    <h3 class="mb-3 text-lg font-semibold text-gray-700">
+                        統計情報
+                    </h3>
+                    <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+                        <div class="rounded-lg bg-gray-50 p-4">
+                            <p class="text-sm text-gray-600">平均</p>
+                            <p
+                                class="text-xl font-bold text-gray-800"
+                                id="stat-mean"
+                            >
+                                -
+                            </p>
+                        </div>
+                        <div class="rounded-lg bg-gray-50 p-4">
+                            <p class="text-sm text-gray-600">最大値</p>
+                            <p
+                                class="text-xl font-bold text-gray-800"
+                                id="stat-max"
+                            >
+                                -
+                            </p>
+                        </div>
+                        <div class="rounded-lg bg-gray-50 p-4">
+                            <p class="text-sm text-gray-600">最小値</p>
+                            <p
+                                class="text-xl font-bold text-gray-800"
+                                id="stat-min"
+                            >
+                                -
+                            </p>
+                        </div>
+                        <div class="rounded-lg bg-gray-50 p-4">
+                            <p class="text-sm text-gray-600">標準偏差</p>
+                            <p
+                                class="text-xl font-bold text-gray-800"
+                                id="stat-std"
+                            >
+                                -
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let referenceFile: File | null = null;
+    let targetFile: File | null = null;
+
+    const referenceInput = document.getElementById(
+        "reference-input",
+    ) as HTMLInputElement;
+    const targetInput = document.getElementById(
+        "target-input",
+    ) as HTMLInputElement;
+    const referencePreview = document.getElementById(
+        "reference-preview",
+    ) as HTMLDivElement;
+    const targetPreview = document.getElementById(
+        "target-preview",
+    ) as HTMLDivElement;
+    const referenceImg = document.getElementById(
+        "reference-img",
+    ) as HTMLImageElement;
+    const targetImg = document.getElementById("target-img") as HTMLImageElement;
+    const form = document.getElementById("anomaly-form") as HTMLFormElement;
+    const submitBtn = document.getElementById(
+        "submit-btn",
+    ) as HTMLButtonElement;
+    const errorMessage = document.getElementById(
+        "error-message",
+    ) as HTMLDivElement;
+    const errorText = document.getElementById(
+        "error-text",
+    ) as HTMLParagraphElement;
+    const resultContainer = document.getElementById(
+        "result-container",
+    ) as HTMLDivElement;
+    const heatmapImg = document.getElementById(
+        "heatmap-img",
+    ) as HTMLImageElement;
+
+    // 参照画像の変更ハンドラ
+    referenceInput.addEventListener("change", (e) => {
+        const target = e.target as HTMLInputElement;
+        const file = target.files?.[0];
+        if (file) {
+            referenceFile = file;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                referenceImg.src = e.target?.result as string;
+                referencePreview.classList.remove("hidden");
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // ターゲット画像の変更ハンドラ
+    targetInput.addEventListener("change", (e) => {
+        const target = e.target as HTMLInputElement;
+        const file = target.files?.[0];
+        if (file) {
+            targetFile = file;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                targetImg.src = e.target?.result as string;
+                targetPreview.classList.remove("hidden");
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // フォーム送信ハンドラ
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        // エラーと結果をリセット
+        errorMessage.classList.add("hidden");
+        resultContainer.classList.add("hidden");
+
+        if (!referenceFile || !targetFile) {
+            errorText.textContent =
+                "参照画像とターゲット画像の両方を選択してください。";
+            errorMessage.classList.remove("hidden");
+            return;
+        }
+
+        // ローディング状態
+        submitBtn.disabled = true;
+        submitBtn.textContent = "処理中...";
+
+        try {
+            const formData = new FormData();
+            formData.append("reference_image", referenceFile);
+            formData.append("target_image", targetFile);
+
+            const response = await fetch("http://localhost:8000/detect", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error("異常検出に失敗しました。");
+            }
+
+            const data = await response.json();
+
+            // 結果を表示
+            heatmapImg.src = data.heatmap;
+            document.getElementById("stat-mean")!.textContent =
+                data.statistics.mean.toFixed(4);
+            document.getElementById("stat-max")!.textContent =
+                data.statistics.max.toFixed(4);
+            document.getElementById("stat-min")!.textContent =
+                data.statistics.min.toFixed(4);
+            document.getElementById("stat-std")!.textContent =
+                data.statistics.std.toFixed(4);
+
+            resultContainer.classList.remove("hidden");
+        } catch (err) {
+            errorText.textContent =
+                err instanceof Error
+                    ? err.message
+                    : "不明なエラーが発生しました。";
+            errorMessage.classList.remove("hidden");
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "異常検出を実行";
+        }
+    });
+</script>
